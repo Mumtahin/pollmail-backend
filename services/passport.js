@@ -7,7 +7,11 @@ const User = mongoose.model('users');
 
 passport.serializeUser((user, done) => {
 	done(null, user.id);
-})
+});
+
+passport.deserializeUser((id, done) => {
+	User.findById()
+});
 
 passport.use(
 	new GoogleStrategy({
@@ -16,7 +20,7 @@ passport.use(
 		callbackURL: '/auth/google/callback'
 	},
 		(accessToken, refreshToken, profile, done) => {
-			User.findOneAndDelete({ googleId: profile.id })
+			User.findOne({ googleId: profile.id })
 				.then((existingUser) => {
 					if (existingUser) {
 						console.log('existing user');
